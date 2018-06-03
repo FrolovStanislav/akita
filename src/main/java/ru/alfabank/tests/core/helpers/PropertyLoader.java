@@ -210,7 +210,7 @@ public class PropertyLoader {
             return propertyValue;
         }
         try {
-            Path path = Paths.get(System.getProperty("user.dir") + valueToFind);
+            Path path = Paths.get("src", "main", "java", valueToFind);
             pathAsString = path.toString();
             String fileValue = new String(Files.readAllBytes(path), "UTF-8");
             AkitaScenario.getInstance().write("Значение из файла " + valueToFind + " = " + fileValue);
