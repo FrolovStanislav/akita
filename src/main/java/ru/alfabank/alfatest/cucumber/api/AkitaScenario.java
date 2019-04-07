@@ -14,9 +14,17 @@ package ru.alfabank.alfatest.cucumber.api;
 
 import com.codeborne.selenide.Selenide;
 import cucumber.api.Scenario;
+import edu.umass.cs.benchlab.har.HarEntry;
 import lombok.extern.slf4j.Slf4j;
+import net.continuumsecurity.Credentials;
+import net.continuumsecurity.UserPassCredentials;
+import net.continuumsecurity.jsslyze.JSSLyze;
+import net.continuumsecurity.steps.World;
 import ru.alfabank.alfatest.cucumber.ScopedVariables;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -192,5 +200,99 @@ public final class AkitaScenario {
      */
     public ScopedVariables getVars() {
         return this.getEnvironment().getVars();
+    }
+
+
+
+    Map<String, List<HarEntry>> methodProxyMap = new HashMap<String, List<HarEntry>>();
+    private Map<String, String> sessionIds = new HashMap<>();
+    private List<HarEntry> recordedEntries;
+    private boolean httpHeadersRecorded = false;
+    private boolean navigated;
+    private boolean spidered;
+    private Credentials credentials;
+    private boolean sslRunCompleted;
+    private HarEntry currentHar;
+    private JSSLyze jSSLyze;
+
+    public synchronized Map<String, List<HarEntry>> getMethodProxyMap() {
+        return methodProxyMap;
+    }
+
+    public boolean isNavigated() {
+        return navigated;
+    }
+
+    public void setNavigated(boolean navigated) {
+        this.navigated = navigated;
+    }
+
+    public boolean isSpidered() {
+        return spidered;
+    }
+
+    public void setSpidered(boolean spidered) {
+        this.spidered = spidered;
+    }
+
+
+    public JSSLyze getjSSLyze() {
+        return jSSLyze;
+    }
+
+    public void setjSSLyze(JSSLyze jSSLyze) {
+        this.jSSLyze = jSSLyze;
+    }
+
+    public Map<String, String> getSessionIds() {
+        return sessionIds;
+    }
+
+    public void setSessionIds(Map<String, String> sessionIds) {
+        this.sessionIds = sessionIds;
+    }
+
+    public List<HarEntry> getRecordedEntries() {
+        return recordedEntries;
+    }
+
+    public void setRecordedEntries(List<HarEntry> recordedEntries) {
+        this.recordedEntries = recordedEntries;
+    }
+
+    public boolean isHttpHeadersRecorded() {
+        return httpHeadersRecorded;
+    }
+
+    public void setHttpHeadersRecorded(boolean httpHeadersRecorded) {
+        this.httpHeadersRecorded = httpHeadersRecorded;
+    }
+
+    public Credentials getCredentials() {
+        return credentials;
+    }
+
+    public UserPassCredentials getUserPassCredentials() {
+        return (UserPassCredentials)credentials;
+    }
+
+    public void setCredentials(Credentials credentials) {
+        this.credentials = credentials;
+    }
+
+    public boolean isSslRunCompleted() {
+        return sslRunCompleted;
+    }
+
+    public void setSslRunCompleted(boolean sslRunCompleted) {
+        this.sslRunCompleted = sslRunCompleted;
+    }
+
+    public HarEntry getCurrentHar() {
+        return currentHar;
+    }
+
+    public void setCurrentHar(HarEntry currentHar) {
+        this.currentHar = currentHar;
     }
 }

@@ -23,6 +23,7 @@ import cucumber.api.java.ru.И;
 import cucumber.api.java.ru.Тогда;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
+import net.continuumsecurity.steps.AppScanningSteps;
 import ru.alfabank.alfatest.cucumber.api.AkitaScenario;
 import ru.alfabank.tests.core.rest.RequestParam;
 
@@ -40,6 +41,7 @@ import static ru.alfabank.tests.core.helpers.PropertyLoader.loadValueFromFileOrP
 public class ApiSteps extends BaseMethods {
 
     private AkitaScenario akitaScenario = AkitaScenario.getInstance();
+    private AppScanningSteps appScanningSteps = new AppScanningSteps();
 
     /**
      * Посылается http запрос по заданному урлу без параметров и BODY.

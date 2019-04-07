@@ -14,6 +14,7 @@ package ru.alfabank.steps;
 
 import com.codeborne.selenide.WebDriverRunner;
 import cucumber.api.Scenario;
+import net.continuumsecurity.steps.WebApplicationSteps;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +34,7 @@ public class BaseMethodsTest {
     private static AkitaScenario akitaScenario;
     private static BaseMethods bm;
     private static WebPageInteractionSteps wpis;
+    private static WebApplicationSteps wss;
 
     @BeforeAll
     static void setup() {
@@ -64,6 +66,7 @@ public class BaseMethodsTest {
         akitaScenario.setVar("testVar", "shouldNotLoadMe");
         assertThat(bm.getPropertyOrStringVariableOrValue("testVar"),
                 equalTo(PropertyLoader.loadProperty("testVar")));
+        wss.verifyProtocolHttps();
     }
 
     @Test
