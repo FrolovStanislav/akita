@@ -190,4 +190,14 @@ public class WebPageInteractionSteps extends BaseMethods {
         akitaScenario.setVar(variableName, titleName);
         akitaScenario.write("Значение заголовка страницы [" + titleName + "] сохранено в переменную [" + variableName + "]");
     }
+
+    /**
+     *  Производится сохранение ссылки страницы в переменную
+     */
+    @И("^ссылка страницы сохранена в переменную \"([^\"]*)\"$")
+    @And("^URL has been saved to the \"([^\"]*)\" variable$")
+    public void saveCurrentUrlToVariable(String variableName) {
+        akitaScenario.setVar(variableName, url());
+        akitaScenario.write("Значение ссылки страницы [" + url() + "] сохранено в переменную [" + variableName + "]");
+    }
 }

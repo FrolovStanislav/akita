@@ -22,18 +22,20 @@ import cucumber.api.java.ru.Когда;
 import cucumber.api.java.ru.Тогда;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import ru.alfabank.alfatest.cucumber.api.AkitaScenario;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.Selenide.sleep;
-import static com.codeborne.selenide.Selenide.switchTo;
+import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.url;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
@@ -205,9 +207,9 @@ public class RoundUpSteps extends BaseMethods {
      */
     @Тогда("^значения из переменной \"([^\"]*)\" и из property файла \"([^\"]*)\" совпадают$")
     @Then("^values of \"([^\"]*)\" variable and \"([^\"]*)\" key from property file are equal$")
-    public void checkIfValueFromVariableEqualPropertyVariable(String envVarible, String propertyVariable) {
-        assertThat("Переменные " + envVarible + " и " + propertyVariable + " не совпадают",
-                (String) akitaScenario.getVar(envVarible), equalToIgnoringCase(loadProperty(propertyVariable)));
+    public void checkIfValueFromVariableEqualPropertyVariable(String envVariable, String propertyVariable) {
+        assertThat("Переменные " + envVariable + " и " + propertyVariable + " не совпадают",
+                (String) akitaScenario.getVar(envVariable), equalToIgnoringCase(loadProperty(propertyVariable)));
     }
 
     /**
@@ -221,5 +223,43 @@ public class RoundUpSteps extends BaseMethods {
     @Then("^\"([^\"]*)\" is true$")
     public void expressionExpression(String expression) {
         akitaScenario.getVars().evaluate("assert(" + expression + ")");
+    }
+
+    /**
+     * Выполняется загрузка файла по заданной ссылке
+     * По умолчанию файл скачивается по пути /build/reports/tests
+     */
+    @Тогда("^выполнено скачивание файла по ссылке \"([^\"]*)\"$")
+    @Then("^file has been downloaded from url \"([^\"]*)\"$")
+    public void downloadFileFromUrl(String url) throws IOException {
+        File file = download(getPropertyOrStringVariableOrValue(url));
+        file.exists();
+        akitaScenario.write("Файл [" + file.getName() + "] успешно скачен");
+    }
+
+    /**
+     * Выполняется загрузка файла по заданной ссылке в указанную папку
+     */
+    @Тогда("^выполнено скачивание файла по ссылке \"([^\"]*)\" в папку \"([^\"]*)\"$")
+    @Then("^file has been downloaded from url \"([^\"]*)\" to path \"([^\"]*)\"$")
+    public void downloadFileFromUrlToPath(String url, String path) throws IOException {
+        File file = download(getPropertyOrStringVariableOrValue(url));
+        file.exists();
+        file.renameTo(new File(path + file.getName()));
+        file.delete();
+        akitaScenario.write("Файл [" + file.getName() + "] успешно скачен в папку [" + path + "]");
+    }
+
+    /**
+     * Выполняется загрузка файла по заданной ссылке в указанную папку с заданным именем
+     */
+    @Тогда("^выполнено скачивание файла по ссылке \"([^\"]*)\" в папку \"([^\"]*)\" с именем \"([^\"]*)\"$")
+    @Then("^file has been downloaded from url \"([^\"]*)\" to path \"([^\"]*)\" with name \"([^\"]*)\"$")
+    public void downloadFileFromUrlToPathWithName(String url, String path, String fileName) throws IOException {
+        File file = download(getPropertyOrStringVariableOrValue(url));
+        file.exists();
+        file.renameTo(new File(path + fileName));
+        file.delete();
+        akitaScenario.write("Файл [" + fileName + "] успешно скачен в папку [" + path + "]");
     }
 }

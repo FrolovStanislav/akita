@@ -17,6 +17,7 @@ import com.codeborne.selenide.ex.ElementShouldNot;
 import cucumber.api.Scenario;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,8 +29,11 @@ import ru.alfabank.alfatest.cucumber.api.AkitaScenario;
 import java.io.File;
 
 import static com.codeborne.selenide.Selenide.executeJavaScript;
+import static com.codeborne.selenide.Selenide.sleep;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class WebPageStepsTest {
@@ -39,6 +43,7 @@ public class WebPageStepsTest {
     private static WebPageVerificationSteps wpvs;
     private static InputInteractionSteps iis;
     private static ManageBrowserSteps mbs;
+    private static ManageBrowserSteps dmbs;
 
 
     @BeforeAll
@@ -241,6 +246,17 @@ public class WebPageStepsTest {
     void testCloseCurrentTab() {
         executeJavaScript("window.open(\"RedirectionPage.html\")");
         wpis.switchToTheTabWithTitle("Page with redirection");
+        mbs.closeCurrentTab();
+        wpis.switchToTheTabWithTitle("Title");
+    }
+
+    @Test
+    void testSaveCurrentUrlToVariable() {
+        executeJavaScript("window.open(\"http://alfabank.ru/\")");
+        sleep(1000);
+        wpis.switchToTheTabWithTitle("Альфа-Банк - кредитные и дебетовые карты, кредиты наличными, автокредитование, ипотека и другие банковские услуги физическим и юридическим лицам – Альфа-Банк");
+        wpis.saveCurrentUrlToVariable("UrlVariable");
+        assertEquals("https://alfabank.ru/", akitaScenario.getVar("UrlVariable"));
         mbs.closeCurrentTab();
         wpis.switchToTheTabWithTitle("Title");
     }

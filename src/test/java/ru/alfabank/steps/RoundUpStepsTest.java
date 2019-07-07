@@ -22,6 +22,7 @@ import ru.alfabank.alfatest.cucumber.api.AkitaEnvironment;
 import ru.alfabank.alfatest.cucumber.api.AkitaScenario;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -186,5 +187,10 @@ public class RoundUpStepsTest {
     @Test
     void expressionExpressionPositive() {
         rus.expressionExpression("\"test\".equals(\"test\")");
+    }
+
+    @Test
+    public void test() throws IOException {
+        rus.downloadFileFromUrl("/src/test/resources/example.pdf");
     }
 }
